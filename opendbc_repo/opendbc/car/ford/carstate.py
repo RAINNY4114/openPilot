@@ -73,14 +73,20 @@ class CarState(CarStateBase, MadsCarState):
 
     # gear
     if self.CP.transmissionType == TransmissionType.automatic:
-      gear = self.shifter_values.get(cp.vl["PowertrainData_10"]["TrnRng_D_Rq"])
-      ret.gearShifter = self.parse_gear_shifter(gear)
+      if self.CP.flags & FordFlags.CANFD:
+        gear = self.shifter_values.get(cp.vl["Gear_Shift_by_Wire_FD1"]["TrnRng_D_RqGsm"])
+      elif self.CP.flags & FordFlags.ALT_STEER_ANGLE:
+        if (cp.vl["TransGearData"]["GearLvrPos_D_Actl"] in (3, 4, 5)):
+         ret.gearShifter = GearShifter.drive
+        elif (cp.vl["TransGearData"]["GearLvrPos_D_Actl"] == 1):
+         ret.gearShifter = GearShifter.reverse
     elif self.CP.transmissionType == TransmissionType.manual:
       ret.clutchPressed = cp.vl["Engine_Clutch_Data"]["CluPdlPos_Pc_Meas"] > 0
       if bool(cp.vl["BCM_Lamp_Stat_FD1"]["RvrseLghtOn_B_Stat"]):
         ret.gearShifter = GearShifter.reverse
       else:
         ret.gearShifter = GearShifter.drive
+
 
     ret.engineRpm = cp.vl["EngVehicleSpThrottle"]["EngAout_N_Actl"]
 
