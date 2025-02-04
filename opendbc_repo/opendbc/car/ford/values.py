@@ -148,7 +148,7 @@ class CAR(Platforms):
     CarSpecs(mass=2000, wheelbase=3.27, steerRatio=17.0),
   )
   LINCOLN_NAUTILUS = FordCANFDPlatformConfig(
-    [FordCarDocs("Lincoln Nautilus 2018-21", "Adaptive Cruise Control with Lane Centering", footnotes=[Footnote.NAUTILUS)],
+    [FordCarDocs("Lincoln Nautilus 2018-21", "Adaptive Cruise Control with Lane Centering", support_type=SupportType.REVIEW)],
     CarSpecs(mass=2000, wheelbase=3.27, steerRatio=19.3),
   )
 
